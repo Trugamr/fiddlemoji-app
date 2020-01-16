@@ -16,7 +16,9 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.Random;
+import java.util.Timer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     Switch trailSwitch = null;
     Random rand = new Random();
 
+    Date date = new Date();
+    long time = date.getTime();
 
     public void changeEmojiSize(float val) {
         emojiSize = 20f + val;
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     public void spawnEmoji(View v, float x, float y) {
+
         float emojiTextSize = emojiSize;
         TextView emoji = new TextView(MainActivity.this);
         emoji.setText(emojis[rand.nextInt(emojis.length)]);
@@ -126,14 +131,16 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                Log.i("XD", String.format("X: %f, Y: %f, Action: %s", event.getX(), event.getY(), event.getAction()));
+//                Log.i("XD", String.format("X: %f, Y: %f, Action: %s", event.getX(), event.getY(), event.getAction()));
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         spawnEmoji(view, event.getX(), event.getY());
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        if(emojiTrail)
+                        if(emojiTrail && new Date().getTime() - time > 40) {
                             spawnEmoji(view, event.getX(), event.getY());
+                            time = new Date().getTime();
+                        }
                         break;
                     default:
                         return false;
