@@ -16,6 +16,8 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
 
     String emojis[] = {"😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😗", "🥰", "😘", "😍", "😎", "😋", "😊", "😉", "😙", "😚", "☺", "🙂", "🤗", "🤩",
@@ -23,12 +25,17 @@ public class MainActivity extends AppCompatActivity {
         "🙃", "😤", "😟", "😞", "😖", "🙁", "😲", "🤑", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "🥵", "🥶", "😳", "🤪", "😵", "🥴",
         "🤮", "🤢", "🤕", "🤒", "😷", "🤬", "😡", "😠", "🤧", "😇", "🥳", "🥺", "🤠", "🤡", "🤥", "🤫", "🤭", "🧐", "🤓", "😈", "👿", "👹", "👺", "💀",
         "😸", "😺", "💩", "🤖", "👾", "👽", "👻", "🙈", "🙉", "🙊", "🐶", "🐵", "🦝", "🐮", "🐷", "🐗", "🐭", "🐹", "🐰", "🐻", "🐲", "🐔", "🦄", "🐴",
-        "🦓", "🐸", "🐼", "🐨", "👀", "👁", "🍕", "🍔", "♥", "💙", "💚", "💛", "💜", "🧡", "❤", "🖤", "💔", "😍", "🥰"};
+        "🦓", "🐸", "🐼", "🐨", "👀", "👁", "🍕", "🍔", "♥", "💙", "💚", "💛", "💜", "🧡", "❤", "🖤", "💔", "😍", "🥰", "💪", "🦵", "🦶", "👂", "🦻", "👃",
+        "🤏", "👈", "👉", "☝", "👆", "👇", "✌", "🤞", "🖖", "🤘", "🤙", "🖐", "🤜", "🤛", "👊", "✊", "👎", "👍", "👌", "✋", "🤚", "👋", "🤟", "👏",
+        "👐", "🙌", "🤲", "💅", "🤝", "🙏", "🎈"};
+
     ConstraintLayout layout = null;
     boolean emojiTrail = false;
     float emojiSize = 60f;
     SeekBar seekBar = null;
     Switch trailSwitch = null;
+    Random rand = new Random();
+
 
     public void changeEmojiSize(float val) {
         emojiSize = 20f + val;
@@ -41,9 +48,8 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     public void spawnEmoji(View v, float x, float y) {
         float emojiTextSize = emojiSize;
-        int randomNumber = getRandomNumber(emojis.length);
         TextView emoji = new TextView(MainActivity.this);
-        emoji.setText(emojis[randomNumber]);
+        emoji.setText(emojis[rand.nextInt(emojis.length)]);
         emoji.setTextColor(0xff000000);
         emoji.setTextSize(emojiTextSize);
         emoji.setAlpha(0f);
