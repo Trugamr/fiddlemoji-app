@@ -7,8 +7,9 @@ import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -43,15 +44,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeEmojiSize(float val) {
         emojiSize = 20f + val;
+        saveSettings();
     }
 
     public void toggleEmojiTrail(boolean val) {
         emojiTrail = val;
+        saveSettings();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     public void spawnEmoji(View v, float x, float y) {
-
         float emojiTextSize = emojiSize;
         TextView emoji = new TextView(MainActivity.this);
         emoji.setText(emojis[rand.nextInt(emojis.length)]);
@@ -118,6 +120,22 @@ public class MainActivity extends AppCompatActivity {
         return (int) Math.floor(Math.random() * limit);
     }
 
+    public void saveSettings() {
+        SharedPreferences sharedPreferences = this.getSharedPreferences(getApplicationInfo().packageName, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean("emojiTrail", emojiTrail).apply();
+        sharedPreferences.edit().putFloat("emojiSize", emojiSize).apply();
+    }
+
+    public void loadSettings() {
+        SharedPreferences sharedPreferences = this.getSharedPreferences(getApplicationInfo().packageName, Context.MODE_PRIVATE);
+        boolean trail = sharedPreferences.getBoolean("emojiTrail", false);
+        emojiTrail = trail;
+        trailSwitch.setChecked(trail);
+        Float size = sharedPreferences.getFloat("emojiSize", 60f);
+        emojiSize = size;
+        seekBar.setProgress(Math.round(size - 20));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
         layout = findViewById(R.id.constraintLayout);
         seekBar = findViewById(R.id.seekBar);
         trailSwitch = findViewById(R.id.trailSwitch);
+
+        loadSettings();
 
         layout.setOnTouchListener(new View.OnTouchListener(){
             @SuppressLint("ClickableViewAccessibility")
